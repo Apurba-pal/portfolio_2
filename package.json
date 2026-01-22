@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@react-three/drei": "^10.0.4",
     "@react-three/fiber": "^9.1.0",
     "@tsparticles/engine": "^3.8.1",
@@ -28,7 +29,7 @@
     "react-router-dom": "^7.3.0",
     "react-three-fiber": "^6.0.13",
     "react-tsparticles": "^2.12.2",
-    "tailwind-merge": "^3.0.2",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.174.0",
     "tsparticles": "^3.8.1"

@@ -9,7 +9,7 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			background: 'black', // Set default background color to black
+  			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
@@ -50,26 +50,38 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
-        backgroundImage: {
-            'radial-yellow-black': 'radial-gradient(circle, yellow,orange, black 40%, black 50%)',
-        },
-        keyframes: {
-            modalIn: {
-                '0%': { transform: 'scale(0.5)', opacity: '0' },
-                '100%': { transform: 'scale(1)', opacity: '1' },
-            },
-            modalOut: {
-                '0%': { transform: 'scale(1)', opacity: '1' },
-                '100%': { transform: 'scale(0.5)', opacity: '0' },
-            },
-        },
-        animation: {
-            modalIn: 'modalIn 0.3s ease-out',
-            modalOut: 'modalOut 0.3s ease-in',
-        },
-        boxShadow: {
-            yellowGlow: "0px 0px 10px yellow", // Custom shadow for the modal
-        },
+  		backgroundImage: {
+  			'radial-yellow-black': 'radial-gradient(circle, yellow,orange, black 40%, black 50%)'
+  		},
+  		keyframes: {
+  			modalIn: {
+  				'0%': {
+  					transform: 'scale(0.5)',
+  					opacity: '0'
+  				},
+  				'100%': {
+  					transform: 'scale(1)',
+  					opacity: '1'
+  				}
+  			},
+  			modalOut: {
+  				'0%': {
+  					transform: 'scale(1)',
+  					opacity: '1'
+  				},
+  				'100%': {
+  					transform: 'scale(0.5)',
+  					opacity: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			modalIn: 'modalIn 0.3s ease-out',
+  			modalOut: 'modalOut 0.3s ease-in'
+  		},
+  		boxShadow: {
+  			yellowGlow: '0px 0px 10px yellow'
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
