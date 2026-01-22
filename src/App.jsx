@@ -11,7 +11,7 @@ import Contact from "./components/pages/Contact";
 import SideNav from "./components/SideNav";
 import Footer from "./components/Footer";
 import Skills from "./components/pages/Skills";
-import MobileNav from "./components/mobileNav";
+// import MobileNav from "./components/MobileNav";
 import AboutMe from "./components/pages/AboutMe";
 
 const App = () => {
