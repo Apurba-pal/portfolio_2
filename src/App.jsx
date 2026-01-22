@@ -5,7 +5,7 @@ import Modal from "./components/Modal";
 import { FaArrowRight } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
 import Header from "./components/pages/Header";
-// import Experience from "./components/pages/Experience";
+import Experience from "./components/pages/Experience";
 import Projects from "./components/pages/Projects";
 import Contact from "./components/pages/Contact";
 import SideNav from "./components/SideNav";
