@@ -12,6 +12,7 @@ import SideNav from "./components/SideNav";
 import Footer from "./components/Footer";
 import Skills from "./components/pages/Skills";
 import MobileNav from "./components/mobileNav";
+import AboutMe from "./components/pages/AboutMe";
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,18 +152,22 @@ const App = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           buttonPosition={buttonPosition}
-          className="min-h-screen" // Added min-h-screen class
         >
-          <div className="text-center">
-            {/* About Me Section */}
-            <h2 className="text-3xl font-bold text-yellow-500 mb-4">About Me</h2>
-            <p className="text-lg text-gray-300 mb-6">
-              Hello! I am Apurba Pal, a passionate developer with a love for creating beautiful and functional web applications. I enjoy learning new technologies and solving challenging problems.
-            </p>
-
-
+          <div
+            className="
+      w-full
+      max-w-6xl
+      mx-auto
+      max-h-[90vh]
+      
+      px-4 sm:px-6 md:px-10
+    "
+          >
+            <AboutMe />
           </div>
         </Modal>
+
+
       </div>
     </Router>
   );

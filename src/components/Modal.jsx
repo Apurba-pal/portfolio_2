@@ -7,7 +7,7 @@ const Modal = ({ isOpen, onClose, children }) => {
     if (isOpen) {
       setIsVisible(true);
     } else {
-      const timeout = setTimeout(() => setIsVisible(false), 300); // Match animation duration
+      const timeout = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timeout);
     }
   }, [isOpen]);
@@ -16,18 +16,23 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+      className={`fixed inset-0 z-50 ${
         isOpen ? "animate-modalIn" : "animate-modalOut"
       }`}
     >
-      <div className="bg-black rounded-lg p-6 w-full max-w-md text-white relative shadow-yellowGlow sm:p-4 sm:w-11/12">
-        <button
-          onClick={onClose}
-          className="bg-black absolute top-2 right-2 text-yellow-500 hover:text-yellow-400 border-none outline-none"
-        >
-          ✖
-        </button>
-        {children}
+      <div className="h-full w-full overflow-y-auto flex items-center justify-center px-4">
+        <div className="w-full max-w-6xl flex justify-center">
+          <div className="relative w-full max-w-5xl">
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-10 z-50 text-yellow-500 hover:text-yellow-400 bg-transparent "
+            >
+              ✖
+            </button>
+
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
