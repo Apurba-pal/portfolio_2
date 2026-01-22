@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
 import ParticlesBackground from "./components/ParticlesBackground";
 import Modal from "./components/Modal";
 import { FaArrowRight } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
+import Header from "./components/pages/Header";
 import Experience from "./components/pages/experience";
 import Projects from "./components/pages/Projects";
 import Contact from "./components/pages/Contact";
