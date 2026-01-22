@@ -9,7 +9,7 @@ import Experience from "./components/pages/Experience";
 import Projects from "./components/pages/Projects";
 import Contact from "./components/pages/Contact";
 import SideNav from "./components/SideNav";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 import Skills from "./components/pages/Skills";
 import MobileNav from "./components/mobileNav";
 import AboutMe from "./components/pages/AboutMe";
