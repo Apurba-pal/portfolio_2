@@ -42,13 +42,13 @@ const App = () => {
     }; // Cleanup on unmount
   }, [isModalOpen]);
 
-  const handleScrollToExperience = (e) => {
-    e.preventDefault();
-    const experienceSection = document.getElementById("experience");
-    if (experienceSection) {
-      experienceSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // const handleScrollToExperience = (e) => {
+  //   e.preventDefault();
+  //   const experienceSection = document.getElementById("experience");
+  //   if (experienceSection) {
+  //     experienceSection.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
 
   return (
     <Router>
@@ -65,11 +65,11 @@ const App = () => {
             <Route
               path="/"
               element={
+                <>
+                
+                {/* Main Home Section (centered content) */}
                 <div className="text-white flex flex-col items-center mt-16 w-full ">
-
-
                   <div className="min-h-screen flex flex-col pt-10 gap-10">
-
                     <div className="flex flex-col md:flex-row items-center justify-center gap-10 lg:gap-40">
                       <div className="order-2 md:order-1 text-center md:text-left">
                         <h1 className="text-lg sm:text-xl">👋 Hi, I am</h1>
@@ -123,18 +123,20 @@ const App = () => {
                   <div id="experience" className="relative z-0">
                     <Experience />
                   </div>
-                  <div id="skills" className="relative z-0">
-                    <Skills />
-                  </div>
-                  {/* Projects Section */}
-                  <div id="projects" className="relative z-0">
-                    <Projects />
-                  </div>
-                  {/* Contact Section */}
-                  <div id="contact" className="relative z-0">
-                    <Contact />
-                  </div>
                 </div>
+                {/* Skills Section (full width, not centered) */}
+                <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <Skills />
+                </div>
+                {/* Projects Section */}
+                <div id="projects" className="relative z-0">
+                  <Projects />
+                </div>
+                {/* Contact Section */}
+                <div id="contact" className="relative z-0">
+                  <Contact />
+                </div>
+                </>
               }
             />
             <Route path="/experience" element={<Experience />} />
