@@ -86,12 +86,12 @@ const App = () => {
                             About Me <FaArrowRight />
                           </button>
                           <a
-                            href="/Apurba Pal web dev.docx"
+                            href="https://drive.google.com/file/d/15z6vtLHMf8nPy0OFT06Gekeh9F0V-lLF/view?usp=sharing"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-lg font-semibold text-yellow-500 border border-yellow-500 rounded-md flex items-center gap-2 bg-transparent hover:bg-gradient-to-r hover:from-yellow-500 hover:to-yellow-500 hover:text-black hover:border-yellow-500 transition-all duration-300"
                           >
-                            Download Resume
+                            View Resume
                           </a>
                         </div>
                       </div>
