@@ -1,162 +1,296 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-// import { useNavigate } from "react-router-dom";
-import { Canvas, useFrame } from "react-three-fiber";
-import { OrbitControls, useGLTF, useFBX } from "@react-three/drei";
-import * as THREE from "three";
-import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaInstagram, FaPaperPlane } from "react-icons/fa";
 import { SiGmail } from "react-icons/si";
+import { HiSparkles } from "react-icons/hi";
+import { MdCheckCircle } from "react-icons/md";
 import { fStore } from "../../firebase";
-import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
+import { collection, addDoc } from "firebase/firestore";
 
-const ModelWithAnimation = () => {
-  const group = useRef();
-  const { scene } = useGLTF("/model/avatar_2.glb");
-  const animation = useFBX("/animation/Talking On A Cell Phone.fbx");
-  const mixer = useRef(null);
+/* =======================
+   SOCIAL LINKS DATA
+======================= */
+const socials = [
+  {
+    icon: FaLinkedin,
+    label: "LinkedIn",
+    sub: "Connect professionally",
+    href: "https://www.linkedin.com/in/apurba-pal-642729265/",
+    color: "#0A66C2",
+  },
+  {
+    icon: FaGithub,
+    label: "GitHub",
+    sub: "See my code",
+    href: "https://github.com/apurba-pal",
+    color: "#e5e7eb",
+  },
+  {
+    icon: FaInstagram,
+    label: "Instagram",
+    sub: "Follow my journey",
+    href: "https://www.instagram.com/apurba__pal/",
+    color: "#E1306C",
+  },
+  {
+    icon: SiGmail,
+    label: "Email",
+    sub: "palapurba2004@gmail.com",
+    href: "mailto:palapurba2004@gmail.com",
+    color: "#EA4335",
+  },
+];
 
-  useEffect(() => {
-    if (group.current && animation.animations.length) {
-      mixer.current = new THREE.AnimationMixer(group.current);
-      mixer.current.clipAction(animation.animations[0]).play();
-    }
-
-    return () => {
-      if (mixer.current) {
-        mixer.current.stopAllAction();
-        mixer.current = null;
-      }
-    };
-  }, [animation]);
-
-  useFrame((state, delta) => {
-    if (mixer.current) {
-      mixer.current.update(delta);
-    }
-  });
-
-  return <primitive ref={group} object={scene} scale={3.5} position={[0, -3, 0]} />;
+/* =======================
+   ANIMATION VARIANTS
+======================= */
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
 };
 
-const Contact = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  // const navigate = useNavigate();
+const itemVariants = {
+  hidden: { opacity: 0, x: -24 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
 
-  const handleSubmit = (e) => {
+const formVariants = {
+  hidden: { opacity: 0, x: 24 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/* =======================
+   SOCIAL CARD
+======================= */
+const SocialCard = ({ icon: Icon, label, sub, href, color }) => (
+  <motion.a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    variants={itemVariants}
+    whileHover={{ x: 6, scale: 1.02 }}
+    transition={{ duration: 0.2 }}
+    className="group flex items-center gap-4 p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-yellow-500/40 hover:bg-white/[0.07] transition-all duration-300"
+  >
+    {/* Icon bubble */}
+    <div
+      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+      style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+    >
+      <Icon className="text-xl" style={{ color }} />
+    </div>
+
+    {/* Text */}
+    <div className="flex flex-col min-w-0">
+      <span className="text-sm font-semibold text-white">{label}</span>
+      <span className="text-xs text-gray-500 truncate group-hover:text-gray-400 transition-colors">{sub}</span>
+    </div>
+
+    {/* Arrow */}
+    <svg
+      className="ml-auto text-gray-600 group-hover:text-yellow-500 group-hover:translate-x-1 transition-all duration-300 shrink-0"
+      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+      strokeLinecap="round" strokeLinejoin="round"
+    >
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  </motion.a>
+);
+
+/* =======================
+   MAIN COMPONENT
+======================= */
+const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const contactsCollection = collection(fStore, "contacts"); // Get the "contacts" collection
-    addDoc(contactsCollection, { name, email, message }) // Add a new document
-      .then(() => {
-        setName('');
-        setEmail('');
-        setMessage('');
-        setIsSubmitted(true);
-        setTimeout(() => setIsSubmitted(false), 1000); // Reset submission state after 3 seconds
-      })
-      .catch((error) => console.log("Error submitting data:", error));
+    setIsSubmitting(true);
+    try {
+      const contactsCollection = collection(fStore, "contacts");
+      await addDoc(contactsCollection, { name, email, message });
+      setName("");
+      setEmail("");
+      setMessage("");
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 3500);
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <motion.div className="flex items-center justify-center p-10">
-      {/* <Canvas style={{ width: "30%", height: "100vh" }}>
-        <ambientLight intensity={4} />
-        <pointLight position={[0, 0, 3]} intensity={500} />
-        <ModelWithAnimation />
-        <OrbitControls
-          minDistance={7}
-          maxDistance={7}
-          minPolarAngle={Math.PI / 3}
-          maxPolarAngle={Math.PI / 3}
-          enableRotate={false} // Disable rotation
-        />
-      </Canvas> */}
-      <div className="bg-transparent backdrop-blur-md bg-opacity-30 p-5 rounded-md shadow-lg border border-yellow-500 flex flex-wrap w-full max-w-5xl">
-        {/* Social Buttons */}
-        <div className="flex flex-col items-center justify-evenly space-y-4 w-full md:w-1/3 md:pr-5 md:border-r md:border-r-yellow-500">
-          <a
-            href="https://www.linkedin.com/in/apurba-pal-642729265/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full h-12 bg-yellow-500 text-black rounded-md hover:bg-black hover:text-yellow-500 hover:border hover:border-yellow-500 transition-all duration-300"
-          >
-            <FaLinkedin className="text-xl" />
-            <span>LinkedIn</span>
-          </a>
-          <a
-            href="https://github.com/apurba-pal"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full h-12 bg-yellow-500 text-black rounded-md hover:bg-black hover:text-yellow-500 hover:border hover:border-yellow-500 transition-all duration-300"
-          >
-            <FaGithub className="text-xl" />
-            <span>GitHub</span>
-          </a>
-          <a
-            href="https://www.instagram.com/apurba__pal/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full h-12 bg-yellow-500 text-black rounded-md hover:bg-black hover:text-yellow-500 hover:border hover:border-yellow-500 transition-all duration-300"
-          >
-            <FaInstagram className="text-xl" />
-            <span>Instagram</span>
-          </a>
-          <a
-            href="mailto:palapurba2004@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full h-12 bg-yellow-500 text-black rounded-md hover:bg-black hover:text-yellow-500 hover:border hover:border-yellow-500 transition-all duration-300"
-          >
-            <SiGmail className="text-xl" />
-            <span>Email</span>
-          </a>
-        </div>
+    <section
+      id="contact"
+      className="relative min-h-screen text-white px-4 sm:px-8 py-16 sm:py-24 overflow-hidden"
+    >
+      {/* Background glow accents */}
+      <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-yellow-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-20 left-0 w-[350px] h-[350px] bg-orange-500/5 rounded-full blur-[80px] pointer-events-none" />
 
-        {/* Contact Form */}
-        <div className="w-full md:w-2/3 md:pl-5 mt-10 md:mt-0">
-          <h1 className="text-4xl font-bold mb-4 text-yellow-500">Let's Talk !!</h1>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex gap-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-1/2 p-3 text-yellow-500 bg-yellow-100 bg-opacity-20 rounded-md border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-1/2 p-3 text-yellow-500 bg-yellow-100 bg-opacity-20 rounded-md border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                required
-              />
+      <div className="relative max-w-5xl mx-auto">
+
+        {/* ── Section heading ── */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-12 sm:mb-16"
+        >
+          <div className="inline-flex items-center gap-2 text-yellow-500 text-xs font-bold uppercase tracking-[0.25em] mb-3">
+            <HiSparkles />
+            <span>Get In Touch</span>
+            <HiSparkles />
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold">
+            Let's{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+              Talk
+            </span>
+          </h1>
+          <p className="text-gray-500 mt-3 text-sm sm:text-base max-w-md mx-auto">
+            Have a project in mind or just want to say hi? I'd love to hear from you.
+          </p>
+        </motion.div>
+
+        {/* ── Two-column layout ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-start">
+
+          {/* ── Left: Social links ── */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="flex flex-col gap-3 lg:pr-10 lg:border-r border-yellow-500/25"
+          >
+            {/* Blurb */}
+            <motion.div variants={itemVariants} className="mb-2">
+              <h2 className="text-lg font-bold text-white mb-1">Find me on</h2>
+              <p className="text-sm text-gray-500">Reach out through any of these platforms.</p>
+            </motion.div>
+
+            {socials.map((s) => (
+              <SocialCard key={s.label} {...s} />
+            ))}
+          </motion.div>
+
+          {/* ── Right: Contact form ── */}
+          <motion.div
+            variants={formVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="lg:pl-10"
+          >
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl">
+              <h2 className="text-lg font-bold text-white mb-1">Send a message</h2>
+              <p className="text-sm text-gray-500 mb-6">I'll get back to you as soon as possible.</p>
+
+              {/* Success banner */}
+              {isSubmitted && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="mb-5 flex items-center gap-3 bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-medium rounded-xl px-4 py-3"
+                >
+                  <MdCheckCircle className="text-lg shrink-0" />
+                  Message sent! I'll be in touch soon.
+                </motion.div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Name + Email row */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1 flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</label>
+                    <input
+                      type="text"
+                      placeholder="Apurba Pal"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="
+                        w-full px-4 py-3 rounded-xl text-sm text-white
+                        bg-white/[0.05] border border-white/10
+                        placeholder:text-gray-600
+                        focus:outline-none focus:border-yellow-500/60 focus:bg-white/[0.08]
+                        transition-all duration-200
+                      "
+                    />
+                  </div>
+                  <div className="flex-1 flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="
+                        w-full px-4 py-3 rounded-xl text-sm text-white
+                        bg-white/[0.05] border border-white/10
+                        placeholder:text-gray-600
+                        focus:outline-none focus:border-yellow-500/60 focus:bg-white/[0.08]
+                        transition-all duration-200
+                      "
+                    />
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Message</label>
+                  <textarea
+                    placeholder="Hey Apurba, I'd love to work with you on..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={5}
+                    required
+                    className="
+                      w-full px-4 py-3 rounded-xl text-sm text-white
+                      bg-white/[0.05] border border-white/10
+                      placeholder:text-gray-600
+                      focus:outline-none focus:border-yellow-500/60 focus:bg-white/[0.08]
+                      transition-all duration-200 resize-none
+                    "
+                  />
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="
+                    w-full flex items-center justify-center gap-2.5
+                    px-6 py-3.5 rounded-xl
+                    text-sm font-semibold text-black
+                    bg-gradient-to-r from-yellow-400 to-orange-500
+                    shadow-[0_4px_20px_rgba(234,179,8,0.30)]
+                    hover:shadow-[0_6px_28px_rgba(234,179,8,0.50)]
+                    hover:scale-[1.02]
+                    disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100
+                    transition-all duration-300
+                  "
+                >
+                  <FaPaperPlane className={`text-sm ${isSubmitting ? "animate-bounce" : ""}`} />
+                  {isSubmitting ? "Sending…" : "Send Message"}
+                </button>
+              </form>
             </div>
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full p-3 text-yellow-500 bg-yellow-100 bg-opacity-20 rounded-md border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              rows="4"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-yellow-500 text-black p-3 rounded-md hover:bg-yellow-600 transition-all duration-300"
-            >
-              {isSubmitted ? "Message Sent!" : "Send Message"}
-            </button>
-          </form>
+          </motion.div>
+
         </div>
       </div>
-    </motion.div>
+    </section>
   );
 };
 
