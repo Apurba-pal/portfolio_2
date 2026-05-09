@@ -1,11 +1,11 @@
-import React from "react";
-import { FaGithub, FaVideo } from "react-icons/fa";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { FaGithub, FaExternalLinkAlt, FaCode } from "react-icons/fa";
+import { MdWeb, MdPsychology, MdSportsEsports } from "react-icons/md";
+import { HiSparkles } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "../ui/tabs.jsx";
 
 /* =======================
@@ -88,167 +88,271 @@ const projects = {
 };
 
 /* =======================
+   TABS CONFIG
+======================= */
+const TAB_LIST = [
+  { key: "web",   label: "Web & 3D",        icon: MdWeb           },
+  { key: "ml",    label: "Machine Learning", icon: MdPsychology    },
+  { key: "games", label: "Games",            icon: MdSportsEsports },
+];
+
+/* =======================
+   ANIMATION VARIANTS
+======================= */
+const gridVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+/* =======================
+   PROJECT CARD
+======================= */
+const ProjectCard = ({ project, index }) => (
+  <motion.div
+    variants={cardVariants}
+    whileHover={{ y: -6, scale: 1.01 }}
+    transition={{ duration: 0.28 }}
+    className="
+      relative group flex flex-col
+      bg-white/[0.03] border border-white/10
+      hover:border-yellow-500/50
+      backdrop-blur-sm rounded-2xl
+      p-6 sm:p-7
+      shadow-lg
+      hover:shadow-[0_8px_40px_-8px_rgba(234,179,8,0.22)]
+      transition-all duration-300
+      overflow-hidden
+    "
+  >
+    {/* Top-right corner glow */}
+    <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+    {/* Index number watermark */}
+    <span className="absolute top-5 right-6 text-5xl font-black text-white/[0.04] select-none pointer-events-none leading-none">
+      {String(index + 1).padStart(2, "0")}
+    </span>
+
+    {/* Icon + title */}
+    <div className="flex items-start gap-3 mb-3">
+      <div className="mt-1 w-9 h-9 rounded-lg bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0 group-hover:bg-yellow-500/20 transition-colors duration-300">
+        <FaCode className="text-yellow-400 text-sm" />
+      </div>
+      <h3 className="text-lg sm:text-xl font-bold text-white leading-snug">
+        {project.title}
+      </h3>
+    </div>
+
+    {/* Divider */}
+    <div className="h-px w-full bg-gradient-to-r from-yellow-500/30 via-orange-500/20 to-transparent mb-4" />
+
+    {/* Description */}
+    <p className="text-sm text-gray-400 leading-relaxed mb-5 flex-1">
+      {project.description}
+    </p>
+
+    {/* Tech badges */}
+    <div className="flex flex-wrap gap-2 mb-6">
+      {project.technologies.map((tech, i) => (
+        <span
+          key={i}
+          className="
+            text-[11px] font-semibold px-2.5 py-1 rounded-full
+            bg-yellow-500/10 text-yellow-400
+            border border-yellow-500/20
+            tracking-wide
+          "
+        >
+          {tech}
+        </span>
+      ))}
+    </div>
+
+    {/* Action buttons */}
+    <div className="mt-auto flex gap-3">
+      <a
+        href={project.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="
+          flex-1 flex justify-center items-center gap-2
+          px-4 py-2.5 rounded-xl text-sm font-semibold
+          bg-yellow-500 text-black
+          hover:bg-yellow-400
+          shadow-[0_2px_12px_rgba(234,179,8,0.30)]
+          hover:shadow-[0_4px_20px_rgba(234,179,8,0.45)]
+          transition-all duration-250
+        "
+      >
+        <FaGithub className="text-base" />
+        Code
+      </a>
+
+      {project.liveDemo && (
+        <a
+          href={project.liveDemo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            flex-1 flex justify-center items-center gap-2
+            px-4 py-2.5 rounded-xl text-sm font-semibold
+            border border-yellow-500/50 text-yellow-400
+            hover:bg-yellow-500/10
+            transition-all duration-250
+          "
+        >
+          <FaExternalLinkAlt className="text-xs" />
+          Demo
+        </a>
+      )}
+    </div>
+  </motion.div>
+);
+
+/* =======================
+   ANIMATED GRID
+======================= */
+const AnimatedGrid = ({ data }) => (
+  <motion.div
+    key={data[0]?.title}
+    variants={gridVariants}
+    initial="hidden"
+    animate="visible"
+    className="grid gap-6 sm:gap-7 grid-cols-1 sm:grid-cols-2"
+  >
+    {data.map((project, index) => (
+      <ProjectCard key={index} project={project} index={index} />
+    ))}
+  </motion.div>
+);
+
+/* =======================
    MAIN COMPONENT
 ======================= */
 const Projects = () => {
+  const [activeTab, setActiveTab] = useState("web");
   return (
-    <section className="min-h-screen p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-yellow-500 text-center mb-5">
-          Projects
-        </h2>
+    <section
+      id="projects"
+      className="relative min-h-screen text-white px-4 sm:px-8 py-16 sm:py-24 overflow-hidden"
+    >
+      {/* Background glow accents */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-yellow-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-20 left-0 w-[400px] h-[300px] bg-orange-500/5 rounded-full blur-[80px] pointer-events-none" />
 
-        <Tabs defaultValue="web" className="w-full flex flex-col items-center">
-          {/* Tabs Header */}
-          <TabsList
+      <div className="relative max-w-5xl mx-auto">
+
+        {/* ── Section heading ── */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-12 sm:mb-16"
+        >
+          <div className="inline-flex items-center gap-2 text-yellow-500 text-xs font-bold uppercase tracking-[0.25em] mb-3">
+            <HiSparkles />
+            <span>What I've Built</span>
+            <HiSparkles />
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold">
+            My{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+              Projects
+            </span>
+          </h1>
+          <p className="text-gray-500 mt-3 text-sm sm:text-base max-w-md mx-auto">
+            A curated collection of things I've designed, built, and shipped.
+          </p>
+        </motion.div>
+
+        {/* ── Tabs ── */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col items-center">
+
+          {/* ── Sliding pill tab switcher ── */}
+          <div
             className="
-    relative flex items-center gap-2 sm:gap-3
-    bg-transparent
-    rounded-full p-1
-    mb-8 sm:mb-5
-    backdrop-blur-0
-  "
+              relative flex items-center gap-3
+              bg-[#111] border border-white/[0.08]
+              rounded-2xl p-1.5 mb-10
+              shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]
+            "
           >
-            {[
-              { key: "web", label: "Web & 3D" },
-              { key: "ml", label: "Machine Learning" },
-              { key: "games", label: "Games" },
-            ].map((tab) => (
-              <TabsTrigger
-                key={tab.key}
-                value={tab.key}
-                className="
-  relative z-10
-  px-5 sm:px-6 py-2 sm:py-2.5
-  rounded-full
-  text-xs sm:text-sm font-semibold
+            {TAB_LIST.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className="relative z-10 flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-colors duration-200 select-none"
+                  style={{ color: isActive ? "#000" : "#9ca3af" }}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="tab-pill"
+                      className="absolute inset-0 rounded-xl bg-yellow-400"
+                      style={{
+                        boxShadow: "0 0 18px 3px rgba(234,179,8,0.50), 0 2px 8px rgba(234,179,8,0.30)",
+                      }}
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                    />
+                  )}
+                  <Icon className="relative z-10 text-sm shrink-0" />
+                  <span className="relative z-10 whitespace-nowrap">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-  bg-black
-  text-yellow-500
-  border border-yellow-500
+          {/* Tab content panels */}
+          {TAB_LIST.map((tab) => (
+            <TabsContent key={tab.key} value={tab.key} className="w-full min-h-[500px]">
+              <AnimatedGrid data={projects[tab.key]} />
+            </TabsContent>
+          ))}
 
-  data-[state=active]:bg-yellow-500
-  data-[state=active]:text-black
-  data-[state=active]:border-transparent
-  data-[state=active]:shadow-md
-  data-[state=active]:shadow-yellow-500/40
-
-  hover:bg-yellow-500
-  hover:text-black
-
-  transition-all duration-300 ease-out
-"
-
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-
-          {/* Web */}
-          <TabsContent value="web" className="w-full min-h-[500px]">
-            <AnimatedGrid data={projects.web} />
-          </TabsContent>
-
-          {/* ML */}
-          <TabsContent value="ml" className="w-full min-h-[500px]">
-            <AnimatedGrid data={projects.ml} />
-          </TabsContent>
-
-          {/* Games */}
-          <TabsContent value="games" className="w-full min-h-[500px]">
-            <AnimatedGrid data={projects.games} />
-          </TabsContent>
-          {/* CTA: View All Projects */}
-<div className="mt-10 flex justify-center">
-  <a
-    href="https://github.com/Apurba-pal"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="
-      inline-flex items-center gap-2
-      px-6 py-3
-      text-sm sm:text-base font-semibold
-      text-yellow-500
-      border border-yellow-500
-      rounded-full
-      hover:bg-yellow-500 hover:text-black
-      transition-all duration-300
-    "
-  >
-    <FaGithub className="text-lg" />
-    View all projects
-  </a>
-</div>
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-12 flex justify-center"
+          >
+            <a
+              href="https://github.com/Apurba-pal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                inline-flex items-center gap-2.5
+                px-7 py-3.5
+                text-sm sm:text-base font-semibold
+                text-black
+                bg-gradient-to-r from-yellow-400 to-orange-500
+                rounded-full
+                shadow-[0_4px_24px_rgba(234,179,8,0.35)]
+                hover:shadow-[0_6px_32px_rgba(234,179,8,0.55)]
+                hover:scale-105
+                transition-all duration-300
+              "
+            >
+              <FaGithub className="text-lg" />
+              View All Projects on GitHub
+            </a>
+          </motion.div>
 
         </Tabs>
       </div>
     </section>
-  );
-};
-
-/* =======================
-   GRID + ANIMATION
-======================= */
-const AnimatedGrid = ({ data }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2"
-    >
-      {data.map((project, index) => (
-        <motion.div
-          key={index}
-          whileHover={{ y: -6 }}
-          transition={{ duration: 0.25 }}
-          className="bg-black border border-yellow-500/60 rounded-xl p-5 sm:p-6 shadow-md hover:shadow-yellow-500/20 flex flex-col"
-        >
-          <h3 className="text-lg sm:text-xl font-semibold text-yellow-500 mb-3">
-            {project.title}
-          </h3>
-
-          <p className="text-sm text-gray-300 leading-relaxed mb-4">
-            {project.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.technologies.map((tech, i) => (
-              <span
-                key={i}
-                className="text-[11px] sm:text-xs px-2 sm:px-3 py-1 rounded-full bg-yellow-500 text-black font-medium"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-auto flex w-full gap-3 sm:gap-4">
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex justify-center items-center gap-2 px-4 py-2 text-sm font-semibold bg-yellow-500 text-black rounded-md hover:bg-yellow-400 transition"
-            >
-              <FaGithub /> Code
-            </a>
-
-            {project.liveDemo && (
-              <a
-                href={project.liveDemo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex justify-center items-center gap-2 px-4 py-2 text-sm font-semibold border border-yellow-500 text-yellow-500 rounded-md hover:bg-yellow-500 hover:text-black transition"
-              >
-                <FaVideo /> Demo
-              </a>
-            )}
-          </div>
-        </motion.div>
-      ))}
-    </motion.div>
   );
 };
 
