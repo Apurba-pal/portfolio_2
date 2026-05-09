@@ -52,7 +52,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="relative bg-transparent min-h-screen overflow-x-hidden"> {/* Added overflow-x-hidden */}
+      <div className="relative bg-transparent min-h-screen overflow-x-hidden pb-20 md:pb-0">
         <MobileNav /> {/* Added MobileNav component */}
         <ParticlesBackground />
         <div className="relative z-0" id="home"> {/* Adjusted parent container */}
