@@ -128,7 +128,7 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="relative min-h-screen text-white px-4 sm:px-8 py-16 sm:py-24 overflow-hidden"
+      className="relative min-h-screen text-white px-4 sm:px-8 py-5 sm:py-10 overflow-hidden"
     >
       {/* Background glow accents */}
       <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-yellow-500/5 rounded-full blur-[100px] pointer-events-none" />

@@ -179,7 +179,7 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      className="relative min-h-screen py-20 overflow-hidden w-full pr-16 md:pr-24"
+      className="relative min-h-screen py-10 overflow-hidden w-full pr-16 md:pr-24"
     >
       {/* Background ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
