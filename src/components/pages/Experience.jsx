@@ -7,11 +7,24 @@ import { HiSparkles } from "react-icons/hi";
    EXPERIENCE DATA
 ======================= */
 const experiences = [
+    {
+    role: "Frontend Developer Intern",
+    duration: "May 2025 – Aug 2025",
+    company: "Vigilantia Praesidium Pvt. Ltd.",
+    tag: "Internship",
+    points: [
+      "Developed main landing page, user panel, and admin panel improving performance across desktop and mobile devices. ",
+
+      "Led full-site development for surveillance solution showcase integrating API endpoints and ensuring stable user interaction.",
+      
+      "Implemented modular UI components and animations, enhancing maintainability and overall user engagement "
+    ],
+  },
   {
     role: "Frontend Developer",
-    duration: "Aug 2024 – Present",
+    duration: "Aug 2024 – Aug 2025",
     company: "AZMTH",
-    tag: "Current",
+    tag: "Internship",
     points: [
       <>
         Crafted the landing page for{" "}
@@ -56,7 +69,7 @@ const experiences = [
     role: "Software Developer",
     duration: "Sep 2023 – Aug 2024",
     company: "The Future Network",
-    tag: "Full-time",
+    tag: "Internship",
     points: [
       "Designed and implemented the landing page for the AI website AZMTH, ensuring a modern, responsive interface.",
       "Collaborated on full-stack projects by integrating APIs and delivering seamless user experiences.",
@@ -261,7 +274,7 @@ const Experience = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
+          viewport={{ once: true, amount: 0 }}
           className="flex flex-col gap-10"
         >
           {experiences.map((exp, index) => (
