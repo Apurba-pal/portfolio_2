@@ -14,75 +14,93 @@ import {
 const projects = {
   web: [
     {
-      title: "Portfolio Website",
+      title: "PMS",
       description:
-        "A fully responsive personal portfolio showcasing projects, skills, and animations.",
-      github: "https://github.com/username/portfolio",
-      liveDemo: "#",
-      technologies: ["React", "Tailwind", "Framer Motion"],
+        "A web application with role-based access for players and organizers, supporting tournament creation and registrations via REST APIs. ",
+      // github: "https://github.com/username/portfolio",
+      github: "",
+      liveDemo: "https://pms.apurbapal.site/",
+      technologies: ["Next.js", "Tailwind", "JWT","Node.js","Express","MongoDB","Cloudinary"],
     },
     {
-      title: "3D Pokémon Website",
+      title: "Pokemon",
       description:
         "A browser-based 3D Pokémon world with WASD movement, collision detection, and stats viewer.",
-      github: "https://github.com/Apurba-pal/3d_pokemon_website.git",
+      // github: "https://github.com/Apurba-pal/3d_pokemon_website.git",
+      github:"",
       liveDemo:
-        "https://www.linkedin.com/posts/apurba-pal-642729265_threejs-web3d-gamedevelopment-activity-7304490671468421121-5fv0",
+        "https://pokemon.apurbapal.site/",
       technologies: ["Three.js", "HTML"],
     },
     {
       title: "Chat Application",
       description:
         "Real-time chat app with JWT auth, image sharing, online status, and theme customization.",
-      github: "https://github.com/Apurba-pal/MERN_chat_app.git",
-      liveDemo: "",
-      technologies: ["React", "Node", "Socket.IO", "MongoDB"],
+      github: "",
+      liveDemo: "chat.apurbapal.site",
+      technologies: ["React", "Node","Express", "Socket.IO", "MongoDB"],
     },
     {
       title: "3D Shirt Customizer",
       description:
         "Interactive 3D shirt customizer with React, Three.js & React Three Fiber.",
-      github: "https://github.com/Apurba-pal/shirt_website.git",
-      liveDemo: "",
+      github: "",
+      liveDemo: "https://stylein3d.apurbapal.site/",
       technologies: ["React", "Three.js", "R3F"],
     },
   ],
 
   ml: [
-    {
-      title: "ML Classification Model",
+        {
+      title: "AI asistant - 'Open'",
       description:
-        "Machine learning classification project with preprocessing and evaluation.",
-      github: "#",
+        "Voice-controlled desktop assistant using Python, SpeechRecognition and Groq.",
+      github: "https://github.com/Apurba-pal/AI_asistant_Open",
       liveDemo: "",
-      technologies: ["Python", "Scikit-Learn", "Pandas"],
+      technologies: ["Python","pyttsx3", "requests","Groq"],
     },
     {
-      title: "ML Regression Model",
+      title: "Gesture Volume Control",
       description:
-        "Regression model with feature engineering and performance metrics.",
-      github: "#",
+        "Real-time hand tracked volume control system using MediaPipe and OpenCV.",
+      github: "https://github.com/Apurba-pal/gesture_controlled_volume",
       liveDemo: "",
-      technologies: ["Python", "NumPy", "Matplotlib"],
+      technologies: ["Python","MediaPipe", "OpenCV","Numpy"],
+    },
+    {
+      title: "Handwritten Digit Classifier",
+      description:
+        "Neural network built from scratch using Python and NumPy, achieving 92% accuracy",
+      github: "https://github.com/Apurba-pal/Digits-recognition-using-neural-network",
+      liveDemo: "",
+      technologies: ["Python", "Numpy", "matplotlib","Neural Network"],
+    },
+    {
+      title: "Cat/Dog Classifier",
+      description:
+        "CNN model built with TensorFlow and Keras to classify cats and dogs",
+      github: "https://github.com/Apurba-pal/Cats-Dog-classification-using-CNN-Deep-Learning",
+      liveDemo: "",
+      technologies: ["Python", "NumPy", "Matplotlib", "tensorflow","keras"],
     },
   ],
 
   games: [
     {
-      title: "Unity Platformer Game",
+      title: "Still They Stand",
       description:
-        "Unity-based platformer with physics, player movement, and level design.",
-      github: "#",
-      liveDemo: "",
-      technologies: ["Unity", "C#", "Game Physics"],
+        "Unity based first-person 3D survival horror game.",
+      github: "",
+      liveDemo: "https://apurba-10.itch.io/still-they-stand",
+      technologies: ["Unity", "C#", "Enemy AI"],
     },
     {
-      title: "Unity Shooter Game",
+      title: "Night of the PumpkinHead",
       description:
-        "Shooter game with AI enemies, scoring system, and combat mechanics.",
-      github: "#",
-      liveDemo: "",
-      technologies: ["Unity", "C#", "AI"],
+        "Unity based first-person 3D survival horror game.",
+      github: "",
+      liveDemo: "https://apurba-10.itch.io/night-of-the-pumpkinhead",
+      technologies: ["Unity", "C#", "Enemy AI"],
     },
   ],
 };
@@ -178,23 +196,25 @@ const ProjectCard = ({ project, index }) => (
 
     {/* Action buttons */}
     <div className="mt-auto flex gap-3">
-      <a
-        href={project.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="
-          flex-1 flex justify-center items-center gap-2
-          px-4 py-2.5 rounded-xl text-sm font-semibold
-          bg-yellow-500 text-black
-          hover:bg-yellow-400
-          shadow-[0_2px_12px_rgba(234,179,8,0.30)]
-          hover:shadow-[0_4px_20px_rgba(234,179,8,0.45)]
-          transition-all duration-250
-        "
-      >
-        <FaGithub className="text-base" />
-        Code
-      </a>
+      {project.github && (
+        <a
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            flex-1 flex justify-center items-center gap-2
+            px-4 py-2.5 rounded-xl text-sm font-semibold
+            bg-yellow-500 text-black
+            hover:bg-yellow-400
+            shadow-[0_2px_12px_rgba(234,179,8,0.30)]
+            hover:shadow-[0_4px_20px_rgba(234,179,8,0.45)]
+            transition-all duration-250
+          "
+        >
+          <FaGithub className="text-base" />
+          Code
+        </a>
+      )}
 
       {project.liveDemo && (
         <a
