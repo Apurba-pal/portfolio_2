@@ -37,7 +37,7 @@ const projects = {
       description:
         "Real-time chat app with JWT auth, image sharing, online status, and theme customization.",
       github: "",
-      liveDemo: "chat.apurbapal.site",
+      liveDemo: "https://chat.apurbapal.site/chats",
       technologies: ["React", "Node","Express", "Socket.IO", "MongoDB"],
     },
     {
