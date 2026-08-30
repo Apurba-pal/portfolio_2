@@ -169,7 +169,7 @@ const ExperienceCard = ({ exp, index }) => {
       <div
         className="
           flex-1
-          ml-4 md:ml-0
+          
           bg-white/[0.03] border border-white/10
           hover:border-yellow-500/50
           backdrop-blur-sm
