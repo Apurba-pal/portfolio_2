@@ -7,6 +7,15 @@ import { HiSparkles } from "react-icons/hi";
    EXPERIENCE DATA
 ======================= */
 const experiences = [
+  {
+    role: "Network Engineer – L1.5",
+    duration: "Aug 2026 – Present",
+    company: "Diversified Network and Infra Solutions Pvt. Ltd.",
+    tag: "Current",
+    points: [
+      "Working on network infrastructure operations, monitoring, troubleshooting, and incident resolution in a production environment.",
+    ],
+  },
     {
     role: "Frontend Developer Intern",
     duration: "May 2025 – Aug 2025",

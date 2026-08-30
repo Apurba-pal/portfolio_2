@@ -31,7 +31,7 @@ const AboutMe = () => {
             <div className="flex items-center gap-2">
               <FaBriefcase className="text-yellow-500" />
               <span>
-                <strong className="text-white">Experience:</strong> 3+ Years
+                <strong className="text-white">Focus:</strong> Software & AI
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -58,28 +58,30 @@ const AboutMe = () => {
               Apurba <span className="text-yellow-500">Pal</span>
             </h2>
             <p className="text-yellow-400 font-medium text-sm sm:text-base">
-              Full Stack Developer & Problem Solver
+                Software Developer & Problem Solver
             </p>
           </div>
 
           {/* MOBILE SUMMARY */}
           <p className="sm:hidden text-gray-300 text-sm leading-relaxed">
-            Full-stack developer focused on building modern, scalable, and
-            interactive web experiences using React and Node.js.
+            Software developer with experience across full-stack development,
+            AI/ML, computer vision, and systems, passionate about building
+            practical solutions to real-world problems.
           </p>
 
           {/* DESKTOP ABOUT TEXT */}
           <div className="hidden sm:block space-y-4">
             <p className="text-gray-300 leading-relaxed">
-              Hello! I am Apurba Pal, a passionate developer with a strong
-              interest in building modern, scalable, and visually appealing
-              web applications. I enjoy learning new technologies and turning
-              complex problems into elegant digital solutions.
+              Hello! I am Apurba Pal, a software developer with hands-on
+              experience across full-stack development, AI/ML, computer vision,
+              and systems engineering. I enjoy building practical solutions
+              and exploring how technology can solve real-world problems.
             </p>
 
             <p className="text-gray-300 leading-relaxed">
-              My primary focus is on crafting interactive experiences using
-              React, Node.js, and modern frontend tooling while continuously
+              From web applications and AI-powered tools to version control
+              systems and interactive 3D experiences, I enjoy working across
+              different areas of software engineering while continuously
               improving my problem-solving skills.
             </p>
           </div>
