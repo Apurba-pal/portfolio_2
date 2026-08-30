@@ -55,36 +55,124 @@ function seededRandom(seed) {
   return x - Math.floor(x);
 }
 
-function generatePositions(count) {
+function generatePositions(count, isMobile = false) {
   const positions = [];
-  const cols = 5; // more columns = wider spread
-  const rows = Math.ceil(count / cols);
+
+  // =========================
+  // DESKTOP — ORIGINAL LAYOUT
+  // =========================
+  if (!isMobile) {
+    const cols = 5;
+    const rows = Math.ceil(count / cols);
+
+    for (let i = 0; i < count; i++) {
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+
+      const jitterX =
+        (seededRandom(i * 3 + 7) - 0.5) * 8;
+
+      const jitterY =
+        (seededRandom(i * 5 + 13) - 0.5) * 8;
+
+      const x =
+        8 +
+        (col / (cols - 1)) * 80 +
+        jitterX;
+
+      const y =
+        12 +
+        (row / (rows - 1 || 1)) * 70 +
+        jitterY;
+
+      const size =
+        38 + seededRandom(i * 7 + 3) * 22;
+
+      const delay =
+        seededRandom(i * 11 + 1) * 1.5;
+
+      const floatDur =
+        3 + seededRandom(i * 13 + 5) * 3;
+
+      const floatAmp =
+        6 + seededRandom(i * 17 + 9) * 12;
+
+      positions.push({
+        x: Math.max(3, Math.min(96, x)),
+        y: Math.max(3, Math.min(92, y)),
+        size,
+        delay,
+        floatDur,
+        floatAmp,
+      });
+    }
+
+    return positions;
+  }
+
+  // =========================
+  // MOBILE — MORE BREATHING ROOM
+  // =========================
+
+  // Deliberately spread across the screen.
+  // This is NOT a strict grid.
+  const mobilePositions = [
+    [18, 7],
+    [50, 5],
+    [82, 9],
+
+    [30, 23],
+    [67, 21],
+    [14, 38],
+
+    [50, 36],
+    [86, 40],
+    [28, 52],
+
+    [67, 55],
+    [48, 65],
+    [15, 67],
+
+    [82, 72],
+    [31, 78],
+    [61, 82],
+
+    [16, 90],
+    [47, 92],
+    [80, 89],
+  ];
 
   for (let i = 0; i < count; i++) {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
+    const [baseX, baseY] = mobilePositions[i];
 
-    // Full-width base grid (2% – 96%) + large jitter so icons reach the edges
-    const jitterX = (seededRandom(i * 3 + 7) - 0.5) * 8;
-    const jitterY = (seededRandom(i * 5 + 13) - 0.5) * 8;
+    const jitterX =
+      (seededRandom(i * 3 + 7) - 0.5) * 5;
 
-    const x = 8 + (col / (cols - 1)) * 80 + jitterX;
-    const y = 12 + (row / (rows - 1 || 1)) * 70 + jitterY;
+    const jitterY =
+      (seededRandom(i * 5 + 13) - 0.5) * 4;
 
-    const size = 38 + seededRandom(i * 7 + 3) * 22; // 38–60px icon
-    const delay = seededRandom(i * 11 + 1) * 1.5;
-    const floatDur = 3 + seededRandom(i * 13 + 5) * 3;
-    const floatAmp = 6 + seededRandom(i * 17 + 9) * 12;
+    const size =
+      30 + seededRandom(i * 7 + 3) * 10;
+
+    const delay =
+      seededRandom(i * 11 + 1) * 1.5;
+
+    const floatDur =
+      3 + seededRandom(i * 13 + 5) * 3;
+
+    const floatAmp =
+      4 + seededRandom(i * 17 + 9) * 6;
 
     positions.push({
-      x: Math.max(3, Math.min(96, x)),
-      y: Math.max(3, Math.min(92, y)),
+      x: baseX + jitterX,
+      y: baseY + jitterY,
       size,
       delay,
       floatDur,
       floatAmp,
     });
   }
+
   return positions;
 }
 
@@ -174,7 +262,12 @@ const SkillBubble = ({ skill, pos, index }) => {
    MAIN COMPONENT
 ======================= */
 const Skills = () => {
-  const positions = useMemo(() => generatePositions(allSkills.length), []);
+  const isMobile = window.innerWidth < 640;
+
+  const positions = useMemo(
+    () => generatePositions(allSkills.length, isMobile),
+    [isMobile]
+  );
 
   return (
     <section
@@ -214,8 +307,8 @@ const Skills = () => {
 
       {/* Scattered skills canvas — full viewport width */}
       <div
-        className="relative w-full"
-        style={{ height: "clamp(480px, 75vh, 650px)" }}
+        className="relative w-full h-[580px] sm:h-[620px] md:h-[640px] lg:h-[650px]"
+        
       >
         {allSkills.map((skill, i) => (
           <SkillBubble key={skill.name} skill={skill} pos={positions[i]} index={i} />
